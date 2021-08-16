@@ -1,7 +1,7 @@
 # transparentwindow
 
-show a transparent window and screenshot.
-
+This package is a small python library for windows.
+It provides functions for creating a transparent window.
 
 ## Installation
 
@@ -14,8 +14,7 @@ pip install transparentwindow
 ```python
 import transparentwindow as tw
 
-tw.SetProcessDpiAwarenessContext()
-tw.show()
+tw.show_tpwin()
 ```
 
 ![sample.png](https://github.com/m-m-git/transparentwindow/blob/main/sample.png)

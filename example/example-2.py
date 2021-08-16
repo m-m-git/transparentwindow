@@ -1,45 +1,18 @@
 """
-Space-Key: capture and show a screen image
-ESC-Key: exit
-
-to use this, please install 'numpy' and 'opencv-python'
+Requires: numpy, opencv-python
 """
-import time
-import multiprocessing
+from datetime import datetime
 
-import cv2
-from transparentwindow import (
-    capture_transparentwindow,
-    SetProcessDpiAwarenessContext,
-    show,
-)
+import cv2 as cv
+import transparentwindow as tw
 
 
-def sub_process(pressed_key: multiprocessing.Value) -> None:
-    def set_pressed_key(key: int) -> None:
-        pressed_key.value = key
-
-    SetProcessDpiAwarenessContext()
-    show(callback=set_pressed_key)
-    pressed_key.value = 27  # ESC-Key
-
-
-def monitor_pressed_key(pressed_key: multiprocessing.Value) -> None:
-    SetProcessDpiAwarenessContext()
-    while True:
-        if pressed_key.value == 32:  # Space-Key
-            img = capture_transparentwindow()
-            cv2.imshow("img", img)
-            cv2.waitKey(0)
-        if pressed_key.value == 27:  # ESC-Key
-            break
-        pressed_key.value = 0
-        time.sleep(0.1)
+def callback(key: int) -> None:
+    title = datetime.now().strftime("%H:%M:%S.%f")
+    img = tw.capture_as_opencv_img(*tw.get_tpwin_xywh())
+    cv.imshow(title, img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
 
-if __name__ == "__main__":
-    print(__doc__)
-    pressed_key = multiprocessing.Value("i", 0)
-    sub = multiprocessing.Process(target=sub_process, args=(pressed_key,), daemon=True)
-    sub.start()
-    monitor_pressed_key(pressed_key)
+tw.show_tpwin(callback=callback)

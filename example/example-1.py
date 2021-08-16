@@ -1,4 +1,3 @@
 import transparentwindow as tw
 
-tw.SetProcessDpiAwarenessContext()
-tw.show(callback=lambda key: print(key, chr(key)))
+tw.show_tpwin(callback=lambda k: print(k, chr(k)))
